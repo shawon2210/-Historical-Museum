@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, usePresence } from "motion/react";
 import {
-  ArrowRight, ArrowUpRight, Plus, Bone, Dna, Gem, Leaf, BookOpen,
-  ChevronLeft, ChevronRight, Menu, X,
+  ArrowUpRight, Plus, Bone, Dna, Gem, Leaf, BookOpen,
+  ChevronLeft, ChevronRight, X,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -15,26 +15,20 @@ const chaptersData = [
   { name: "Marine Fossil Gallery", image: "https://res.cloudinary.com/dsdxaxkiz/image/upload/v1779624256/04_get63z.png" },
   { name: "Prehistoric Giants", image: "https://res.cloudinary.com/dsdxaxkiz/image/upload/v1779624251/05_kz1tyu.png" },
 ];
-
 const navLinks = ["Visit", "Exhibitions", "Discover", "Learn", "About"];
 
 /* ═══════════════════════════════════════════════════════════════
    ANIMATION VARIANTS
    ═══════════════════════════════════════════════════════════════ */
 const fadeUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" as const } },
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" as const } },
 };
-
 const fadeUpStagger = {
   initial: {},
-  animate: { transition: { staggerChildren: 0.15, delayChildren: 0.6 } },
+  animate: { transition: { staggerChildren: 0.1, delayChildren: 0.4 } },
 };
 
-const letterBlock = {
-  initial: { y: 120, opacity: 0 },
-  animate: { y: 0, opacity: 1, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const } },
-};
 
 /* ═══════════════════════════════════════════════════════════════
    SAND TRANSITION IMAGE
@@ -115,290 +109,208 @@ function LeafIcon({ className = "" }: { className?: string }) {
 export default function App() {
   const [showVideo, setShowVideo] = useState(false);
   const [activeChapter, setActiveChapter] = useState(2);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => { const t = setTimeout(() => setShowVideo(true), 2800); return () => clearTimeout(t); }, []);
   useEffect(() => { const i = setInterval(() => setActiveChapter(p => (p + 1) % 5), 3500); return () => clearInterval(i); }, []);
   useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [isMobileMenuOpen]);
-
-  const goToPrevChapter = () => setActiveChapter(p => (p - 1 + 5) % 5);
-  const goToNextChapter = () => setActiveChapter(p => (p + 1) % 5);
+  }, [mobileMenuOpen]);
 
   return (
-    <div className="relative w-full overflow-x-hidden max-w-[100vw] font-sans bg-[#fcfcfc]">
+    <div style={{ overflowX: "hidden", maxWidth: "100vw" }}>
 
       {/* ═══════════════════════════════════════════════════════
-          SECTION 1 — HERO
+          NAVIGATION — Sticky, fixed height, no overlap
           ═══════════════════════════════════════════════════════ */}
-      <section className="relative w-full min-h-screen flex flex-col overflow-hidden">
-
-        {/* ── 1A. HEADER (NHM Logo) ── */}
-        <motion.header
-          className="pt-4 px-4 sm:pt-5 sm:px-6 md:pt-6 md:px-16 z-20 relative"
-          initial="initial" animate="animate"
-          variants={{ initial: {}, animate: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
-        >
-          <motion.h1 variants={{ initial: { scale: 1.03 }, animate: { scale: 1, transition: { staggerChildren: 0.06, delayChildren: 0.1 } } }}>
-            <svg viewBox="0 0 840 100" fill="#111" className="w-full h-auto max-w-full" xmlns="http://www.w3.org/2000/svg" aria-label="NHM Logo">
+      <nav className="nav-backdrop" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 64 }}>
+        <div style={{ maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%", height: "100%" }} className="flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <svg viewBox="0 0 840 100" fill="#1a1a1a" className="h-6 md:h-7 w-auto" xmlns="http://www.w3.org/2000/svg" aria-label="NHM">
               <g transform="translate(0,0)">
-                <motion.polygon points="0,0 14,0 14,100 0,100" variants={letterBlock} />
-                <motion.polygon points="200,0 214,0 214,100 200,100" variants={letterBlock} />
-                <motion.polygon points="0,0 33,0 214,100 181,100" variants={letterBlock} />
+                <polygon points="0,0 14,0 14,100 0,100" /><polygon points="200,0 214,0 214,100 200,100" /><polygon points="0,0 33,0 214,100 181,100" />
               </g>
               <g transform="translate(280,0)">
-                <motion.polygon points="0,0 14,0 14,100 0,100" variants={letterBlock} />
-                <motion.polygon points="200,0 214,0 214,100 200,100" variants={letterBlock} />
-                <motion.polygon points="14,43 200,43 200,57 14,57" variants={letterBlock} />
+                <polygon points="0,0 14,0 14,100 0,100" /><polygon points="200,0 214,0 214,100 200,100" /><polygon points="14,43 200,43 200,57 14,57" />
               </g>
               <g transform="translate(560,0)">
-                <motion.polygon points="0,0 14,0 14,100 0,100" variants={letterBlock} />
-                <motion.polygon points="266,0 280,0 280,100 266,100" variants={letterBlock} />
-                <motion.polygon points="0,0 26,0 153,100 127,100" variants={letterBlock} />
-                <motion.polygon points="254,0 280,0 153,100 127,100" variants={letterBlock} />
+                <polygon points="0,0 14,0 14,100 0,100" /><polygon points="266,0 280,0 280,100 266,100" /><polygon points="0,0 26,0 153,100 127,100" /><polygon points="254,0 280,0 153,100 127,100" />
               </g>
             </svg>
-          </motion.h1>
-        </motion.header>
-
-        {/* ── 1B. SUB-NAV BAR ── */}
-        <motion.div
-          className="flex justify-between items-start mt-4 sm:mt-6 md:mt-8 px-4 sm:px-6 md:px-16 z-20 relative"
-          variants={fadeUp} initial="initial" animate="animate"
-        >
-          {/* Left column — brand words */}
-          <div className="hidden sm:flex sm:flex-col text-[10px] md:text-[11px] font-mono tracking-[0.2em] uppercase text-gray-800 leading-relaxed w-auto min-w-0">
-            <span>Natura</span>
-            <span>History</span>
-            <span>Museum</span>
+            <span className="hidden sm:inline text-xs md:text-sm font-mono uppercase tracking-widest" style={{ color: "#8a8a8a" }}>
+              Natural History Museum
+            </span>
           </div>
 
-          {/* Arrow separator — hidden on mobile */}
-          <div className="hidden lg:flex w-auto justify-center pt-1 px-2">
-            <ArrowRight size={14} strokeWidth={1} className="text-gray-400" />
-          </div>
-
-          {/* Center column — tagline */}
-          <div className="flex-1 text-[10px] md:text-[11px] font-mono tracking-[0.15em] md:tracking-[0.2em] text-gray-800 leading-relaxed max-w-[280px] sm:max-w-[340px] md:max-w-[400px]">
-            <span>Exploring the story of life on earth through science, discovery and wonder.</span>
-          </div>
-
-          {/* Arrow separator — hidden on mobile */}
-          <div className="hidden lg:flex w-auto justify-center pt-1 px-2">
-            <ArrowRight size={14} strokeWidth={1} className="text-gray-400" />
-          </div>
-
-          {/* Right column — nav links (desktop only) */}
-          <div className="hidden md:flex w-auto flex-col text-[10px] md:text-[11px] font-mono tracking-[0.2em] uppercase text-gray-800">
-            {navLinks.map(l => (
-              <span key={l} className="cursor-pointer hover:text-black hover:underline transition-colors duration-300 py-0.5">{l}</span>
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            {navLinks.map(link => (
+              <a key={link} href="#" className="text-xs font-mono uppercase tracking-widest relative group py-1"
+                style={{ color: "#4a4a4a" }}>
+                {link}
+                <span className="absolute bottom-0 left-0 w-0 h-px group-hover:w-full transition-all duration-300" style={{ backgroundColor: "#1a1a1a" }} />
+              </a>
             ))}
           </div>
 
-          {/* Hamburger button — mobile only */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden relative z-[100] p-2 -mr-2 flex flex-col items-center justify-center gap-[6px]"
-            aria-label="Toggle menu"
-          >
-            <motion.span
-              className="block w-8 h-[1.5px] bg-black"
-              animate={isMobileMenuOpen ? { rotate: 45, y: 7.5 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.3 }}
-            />
-            <motion.span
-              className="block w-8 h-[1.5px] bg-black"
-              animate={isMobileMenuOpen ? { rotate: -45, y: -7.5 } : { rotate: 0, y: 0 }}
-              transition={{ duration: 0.3 }}
-            />
+          {/* Mobile hamburger */}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 flex flex-col items-center justify-center gap-[5px]" aria-label="Menu">
+            <motion.span className="block w-6 h-[1.5px]" style={{ backgroundColor: "#1a1a1a" }}
+              animate={mobileMenuOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.3 }} />
+            <motion.span className="block w-6 h-[1.5px]" style={{ backgroundColor: "#1a1a1a" }}
+              animate={mobileMenuOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }} transition={{ duration: 0.3 }} />
           </button>
-        </motion.div>
+        </div>
+      </nav>
 
-        {/* ── 1C. MOBILE MENU OVERLAY ── */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              className="md:hidden fixed inset-0 z-[90] bg-[#fcfcfc] flex flex-col"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex items-center justify-between px-4 pt-4">
-                <svg viewBox="0 0 840 100" fill="#111" className="w-32 h-auto" xmlns="http://www.w3.org/2000/svg" aria-label="NHM Logo">
-                  <g transform="translate(0,0)">
-                    <polygon points="0,0 14,0 14,100 0,100" />
-                    <polygon points="200,0 214,0 214,100 200,100" />
-                    <polygon points="0,0 33,0 214,100 181,100" />
-                  </g>
-                  <g transform="translate(280,0)">
-                    <polygon points="0,0 14,0 14,100 0,100" />
-                    <polygon points="200,0 214,0 214,100 200,100" />
-                    <polygon points="14,43 200,43 200,57 14,57" />
-                  </g>
-                  <g transform="translate(560,0)">
-                    <polygon points="0,0 14,0 14,100 0,100" />
-                    <polygon points="266,0 280,0 280,100 266,100" />
-                    <polygon points="0,0 26,0 153,100 127,100" />
-                    <polygon points="254,0 280,0 153,100 127,100" />
-                  </g>
-                </svg>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="p-2" aria-label="Close menu">
-                  <X size={24} strokeWidth={1.5} />
-                </button>
-              </div>
-              <nav className="flex-1 flex flex-col justify-center px-4 -mt-8">
-                {navLinks.map((link, i) => (
-                  <motion.button
-                    key={link}
-                    className="text-left text-lg font-mono tracking-[0.12em] uppercase text-gray-800 hover:text-black py-4 border-b border-gray-100"
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ delay: i * 0.05, duration: 0.3 }}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link}
-                  </motion.button>
-                ))}
-              </nav>
-              <div className="px-4 pb-6 border-t border-gray-200 pt-5">
-                <p className="text-[10px] font-mono text-gray-500 leading-relaxed tracking-wider">
-                  Exploring the story of life on earth through science, discovery and wonder.
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div className="md:hidden fixed inset-0 z-[90]" style={{ backgroundColor: "#fcfcfc" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <div className="flex items-center justify-between px-6" style={{ height: 64 }}>
+              <span className="text-sm font-mono uppercase tracking-widest" style={{ color: "#8a8a8a" }}>Menu</span>
+              <button onClick={() => setMobileMenuOpen(false)} className="p-2" aria-label="Close">
+                <X size={24} strokeWidth={1.5} style={{ color: "#1a1a1a" }} />
+              </button>
+            </div>
+            <nav className="flex flex-col justify-center px-6" style={{ height: "calc(100vh - 128px)" }}>
+              {navLinks.map((link, i) => (
+                <motion.button key={link} className="text-left text-2xl font-mono uppercase tracking-wider py-5 text-left"
+                  style={{ color: "#1a1a1a", borderBottom: "1px solid #e0e0e0" }}
+                  initial={{ x: -20, opacity: 0 }} animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: i * 0.06, duration: 0.3 }} onClick={() => setMobileMenuOpen(false)}>
+                  {link}
+                </motion.button>
+              ))}
+            </nav>
+            <div className="px-6 py-5" style={{ borderTop: "1px solid #e0e0e0" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "#8a8a8a" }}>
+                Exploring the story of life on earth through science, discovery and wonder.
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* ── 1D. BACKGROUND VIDEO ── */}
+      {/* ═══════════════════════════════════════════════════════
+          SECTION 1 — HERO
+          Clear zones: nav spacer → content → scroll indicator
+          No overlap between any elements
+          ═══════════════════════════════════════════════════════ */}
+      <section style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+
+        {/* Background video */}
         {showVideo && (
-          <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-            <video autoPlay loop muted playsInline className="w-full h-full object-cover" aria-hidden="true">
+          <div style={{ position: "absolute", inset: 0, zIndex: 0, overflow: "hidden", pointerEvents: "none" }}>
+            <video autoPlay loop muted playsInline style={{ width: "100%", height: "100%", objectFit: "cover" }} aria-hidden="true">
               <source src="https://res.cloudinary.com/dsdxaxkiz/video/upload/v1779624998/magnific_use-img-2-as-the-exact-ba_Piu3X0W42C_wnrc8f.mp4" type="video/mp4" />
             </video>
           </div>
         )}
 
-        {/* ── 1E + 1F. HERO CONTENT — stacked mobile, side-by-side desktop ── */}
-        <div className="flex-1 flex flex-col md:flex-row md:items-start md:justify-between relative z-10 px-4 sm:px-6 md:px-16 mt-8 sm:mt-12 md:mt-16 lg:mt-20 xl:mt-24 gap-8 md:gap-6">
+        {/* Hero content — starts below the 64px fixed nav */}
+        <div style={{ position: "relative", zIndex: 10, paddingTop: 100, paddingBottom: 80, maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }}>
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between" style={{ gap: 48 }}>
 
-          {/* Left — headline block */}
-          <motion.div
-            className="w-full md:w-auto md:max-w-[520px] lg:max-w-[580px] xl:max-w-[640px] shrink-0"
-            initial="initial" animate="animate"
-            variants={fadeUpStagger}
-          >
-            {/* Section indicator */}
-            <motion.div className="flex items-center gap-3 mb-3 sm:mb-4" variants={fadeUp}>
-              <span className="text-[10px] sm:text-xs font-mono">01</span>
-              <div className="w-12 sm:w-16 h-[1.5px] bg-black/20" />
-            </motion.div>
-
-            {/* Headline — fluid typography */}
-            <motion.h2
-              className="text-hero font-normal tracking-tight mb-3 sm:mb-4"
-              variants={fadeUp}
-            >
-              TIMELESS<br />WONDERS
-            </motion.h2>
-
-            {/* Description — fluid, no fixed width */}
-            <motion.p
-              className="text-body text-gray-700 max-w-[260px] sm:max-w-[300px] md:max-w-[340px] mb-5 sm:mb-6"
-              variants={fadeUp}
-            >
-              Step into the natural world and<br />
-              discover the stories written<br />
-              millions of years ago.
-            </motion.p>
-
-            {/* CTA Button */}
-            <motion.div variants={fadeUp}>
-              <motion.button
-                className="relative bg-[#1a1a1a] px-5 py-3 sm:px-6 sm:py-3.5 border border-[#1a1a1a] rounded-md shadow-sm overflow-hidden group flex items-center gap-3 cursor-pointer"
-                whileHover={{ y: -0.5 }}
-                whileTap={{ y: 0, boxShadow: "none" }}
-              >
-                <motion.span
-                  className="absolute inset-0 bg-[#fcfcfc]"
-                  initial={{ x: "-101%" }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
-                />
-                <motion.span
-                  className="relative z-10 text-white group-hover:text-[#111] transition-colors duration-300"
-                  whileHover={{ scale: 1.1, rotate: -12, y: -4 }}
-                >
-                  <LeafIcon className="w-[18px] h-[18px]" />
-                </motion.span>
-                <span className="relative z-10 text-sm sm:text-[15px] font-medium text-white group-hover:text-[#111] transition-colors duration-300">
-                  Explore Now
-                </span>
-              </motion.button>
-            </motion.div>
-          </motion.div>
-
-          {/* Right — T-Rex specimen card: full-width on mobile, overlay on desktop */}
-          <motion.div
-            className="w-full md:w-auto md:max-w-[220px] lg:max-w-[240px] mt-4 md:mt-0 z-5 flex flex-col"
-            initial="initial" animate="animate"
-            variants={fadeUpStagger}
-          >
-            <motion.div className="mb-4 sm:mb-5" variants={fadeUp}>
-              <h3 className="text-[10px] font-bold font-mono tracking-widest uppercase text-gray-500 mb-1.5 sm:mb-2">
-                Tyrannosaurus Rex
-              </h3>
-              <p className="text-[12px] sm:text-[13px] text-gray-600 leading-[1.6]">
-                Late Cretaceous period<br />68-66 million years ago
-              </p>
-            </motion.div>
-
-            <motion.div className="space-y-2 mb-4 sm:mb-5" variants={fadeUp}>
-              <div className="flex items-baseline justify-between">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-gray-500">Length</span>
-                <span className="text-[13px] font-medium">12.3 m</span>
-              </div>
-              <div className="flex items-baseline justify-between">
-                <span className="text-[10px] font-mono tracking-widest uppercase text-gray-500">Height</span>
-                <span className="text-[13px] font-medium">4.0 m</span>
-              </div>
-            </motion.div>
-
-            <motion.div className="flex items-center gap-3 cursor-pointer group" variants={fadeUp}>
-              <motion.div
-                className="w-10 h-10 rounded-full border border-gray-400 flex items-center justify-center group-hover:border-black group-hover:bg-[#111] transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-              >
-                <Plus size={16} strokeWidth={1.5} className="text-gray-600 group-hover:text-white transition-colors duration-300" />
+            {/* Left zone — headline */}
+            <motion.div className="w-full lg:w-auto" style={{ maxWidth: "100%", flex: "1 1 auto" }} initial="initial" animate="animate" variants={fadeUpStagger}>
+              {/* Section label */}
+              <motion.div className="flex items-center gap-3 mb-5" variants={fadeUp}>
+                <span className="text-xs font-mono tracking-widest" style={{ color: "#8a8a8a" }}>01</span>
+                <div style={{ width: 48, height: 1, backgroundColor: "#d0d0d0" }} />
               </motion.div>
-              <span className="text-[10px] font-mono uppercase tracking-widest font-bold text-gray-600 group-hover:text-black transition-colors duration-300">
-                View Details
-              </span>
+
+              {/* H1 — clamped 48-64px */}
+              <motion.h1 className="font-normal tracking-tight mb-5 w-full"
+                style={{ fontSize: "clamp(2.25rem, 6vw, 4rem)", lineHeight: 1.05, color: "#1a1a1a", maxWidth: "100%" }}
+                variants={fadeUp}>
+                TIMELESS<br />WONDERS
+              </motion.h1>
+
+              {/* Body — 16-20px, responsive width */}
+              <motion.p className="mb-8 w-full" style={{ fontSize: "clamp(0.9375rem, 1.4vw, 1.25rem)", lineHeight: 1.6, color: "#4a4a4a", maxWidth: "100%" }}
+                variants={fadeUp}>
+                Step into the natural world and<br className="hidden sm:block" />discover the stories written<br className="hidden sm:block" />millions of years ago.
+              </motion.p>
+
+              {/* CTA */}
+              <motion.div variants={fadeUp} className="w-full sm:w-auto">
+                <motion.button className="relative px-6 sm:px-8 py-3.5 rounded-md overflow-hidden group flex items-center gap-3 cursor-pointer w-full sm:w-auto justify-center"
+                  style={{ backgroundColor: "#1a1a1a", border: "1px solid #1a1a1a" }}
+                  whileHover={{ y: -1 }} whileTap={{ y: 0 }}>
+                  <motion.span className="absolute inset-0" style={{ backgroundColor: "#fcfcfc" }}
+                    initial={{ x: "-101%" }} whileHover={{ x: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} />
+                  <motion.span className="relative z-10 group-hover:[color:#1a1a1a] transition-colors duration-300"
+                    whileHover={{ scale: 1.1, rotate: -12, y: -4 }}
+                    style={{ color: "#fcfcfc" }}>
+                    <LeafIcon className="w-[18px] h-[18px]" />
+                  </motion.span>
+                  <span className="relative z-10 text-sm font-medium group-hover:[color:#1a1a1a] transition-colors duration-300"
+                    style={{ color: "#fcfcfc" }}>
+                    Explore Now
+                  </span>
+                </motion.button>
+              </motion.div>
             </motion.div>
-          </motion.div>
+
+            {/* Right zone — T-Rex card, only on lg+ */}
+            <motion.div className="hidden lg:block shrink-0 w-full lg:w-auto" style={{ maxWidth: 320, minWidth: 0 }}
+              initial="initial" animate="animate" variants={fadeUpStagger}>
+              <div className="rounded-xl p-6" style={{ backgroundColor: "rgba(252,252,252,0.85)", backdropFilter: "blur(8px)", border: "1px solid #e8e8e8" }}>
+                <motion.div className="mb-5" variants={fadeUp}>
+                  <h3 className="text-xs font-bold font-mono uppercase tracking-widest mb-2" style={{ color: "#8a8a8a" }}>
+                    Tyrannosaurus Rex
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#4a4a4a" }}>
+                    Late Cretaceous period<br />68–66 million years ago
+                  </p>
+                </motion.div>
+
+                {/* Stats grid */}
+                <motion.div className="mb-5" variants={fadeUp}>
+                  {[
+                    { label: "Length", value: "12.3 m" },
+                    { label: "Height", value: "4.0 m" },
+                    { label: "Weight", value: "8,000 kg" },
+                  ].map((stat, i) => (
+                    <div key={stat.label} className="flex items-baseline justify-between"
+                      style={{ paddingTop: 8, paddingBottom: 8, borderBottom: i < 2 ? "1px solid #e8e8e8" : "none" }}>
+                      <span className="text-xs font-mono uppercase tracking-widest shrink-0" style={{ color: "#8a8a8a" }}>{stat.label}</span>
+                      <span className="text-sm font-medium tabular-nums" style={{ color: "#4a4a4a" }}>{stat.value}</span>
+                    </div>
+                  ))}
+                </motion.div>
+
+                <motion.div className="flex items-center gap-3 cursor-pointer group" variants={fadeUp}>
+                  <motion.div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-[#1a1a1a] transition-all duration-300"
+                    style={{ border: "1px solid #c0c0c0" }} whileHover={{ scale: 1.05 }}>
+                    <Plus size={16} strokeWidth={1.5} className="group-hover:text-[#fcfcfc] transition-colors duration-300" style={{ color: "#8a8a8a" }} />
+                  </motion.div>
+                  <span className="text-xs font-mono uppercase tracking-widest font-bold group-hover:[color:#1a1a1a] transition-colors duration-300"
+                    style={{ color: "#8a8a8a" }}>
+                    View Details
+                  </span>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        {/* ── 1G. SCROLL INDICATOR — visible on all sizes ── */}
-        <motion.div
-          className="absolute bottom-6 sm:bottom-8 left-4 sm:left-6 md:left-16 flex items-center gap-3 z-10"
+        {/* Scroll indicator — absolute bottom of hero */}
+        <motion.div className="absolute bottom-8 flex items-center gap-3" style={{ left: "5%", zIndex: 10 }}
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}
-        >
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gray-300 flex items-center justify-center gap-[4px]">
-            <motion.div
-              className="w-[1px] h-2.5 sm:h-3 bg-gray-600"
-              animate={{ y: [0, 2, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-            <motion.div
-              className="w-[1px] h-2.5 sm:h-3 bg-gray-600"
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            />
+          transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}>
+          <div className="w-10 h-10 rounded-full flex items-center justify-center gap-[4px]" style={{ border: "1px solid #d0d0d0" }}>
+            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#8a8a8a" }}
+              animate={{ y: [0, 2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} />
+            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#8a8a8a" }}
+              animate={{ y: [0, -2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} />
           </div>
-          <span className="text-[9px] sm:text-[10px] font-mono tracking-widest uppercase text-gray-500 font-semibold">
+          <span className="text-[10px] font-mono tracking-widest uppercase font-medium" style={{ color: "#8a8a8a" }}>
             Scroll to explore
           </span>
         </motion.div>
@@ -406,78 +318,75 @@ export default function App() {
 
       {/* ═══════════════════════════════════════════════════════
           SECTION 2 — EXPLORE OUR WORLD
+          Centered, contained, proper spacing
           ═══════════════════════════════════════════════════════ */}
-      <section className="relative w-full min-h-[60vh] sm:min-h-[70vh] md:min-h-screen bg-[#fcfcfc] flex flex-col items-center overflow-hidden pt-16 sm:pt-20 md:pt-28 lg:pt-32 pb-0 z-20">
+      <section style={{ backgroundColor: "#fcfcfc", paddingTop: 100, paddingBottom: 0, overflow: "hidden" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }} className="flex flex-col items-center">
 
-        {/* ── 2A. SECTION LABEL ── */}
-        <motion.div
-          className="text-[10px] md:text-[11px] font-mono tracking-[0.2em] mb-6 sm:mb-8 md:mb-12 text-center px-4"
-          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-        >
-          <span className="text-gray-500">[ 02 ] </span>
-          <span className="text-gray-900 font-bold uppercase">Explore Our World</span>
-        </motion.div>
+          {/* Label */}
+          <motion.div className="text-xs font-mono tracking-widest mb-8 text-center"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <span style={{ color: "#8a8a8a" }}>[ 02 ] </span>
+            <span className="font-bold uppercase" style={{ color: "#1a1a1a" }}>Explore Our World</span>
+          </motion.div>
 
-        {/* ── 2B. MAIN HEADING — fluid typography ── */}
-        <motion.h2
-          className="text-section font-medium tracking-tight text-[#111] text-center max-w-[900px] mb-6 sm:mb-8 md:mb-12 px-4"
-          initial={{ y: 40, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, margin: "-100px" }} transition={{ duration: 0.6 }}
-        >
-          Unearth the stories of our planet's<br className="hidden md:block" /> past through fossils, minerals, and ancient wonders.
-        </motion.h2>
+          {/* H2 — max-width 800px, centered, 32-40px */}
+          <motion.h2 className="font-medium tracking-tight text-center mb-12"
+            style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", lineHeight: 1.15, color: "#1a1a1a" }}
+            initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }}>
+            Unearth the stories of our planet's<br className="hidden sm:block" /> past through fossils, minerals, and ancient wonders.
+          </motion.h2>
 
-        {/* ── 2C. ACTION PILLS — wrap on mobile, row on desktop ── */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mb-8 sm:mb-10 md:mb-16 px-4 max-w-[700px]"
-          initial="initial" whileInView="animate" viewport={{ once: true }}
-          variants={{ initial: {}, animate: { transition: { staggerChildren: 0.1, delayChildren: 0.3 } } }}
-        >
-          {[
-            { icon: Bone, label: "Dinosaurs" },
-            { icon: Dna, label: "Ancient Life" },
-            { icon: Gem, label: "Minerals" },
-            { icon: Leaf, label: "Fossils" },
-            { icon: BookOpen, label: "Learn More" },
-          ].map(({ icon: Icon, label }) => (
-            <motion.button
-              key={label}
-              className="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-full border border-gray-300 text-[10px] sm:text-[11px] font-medium uppercase tracking-wider bg-white/50 backdrop-blur-sm text-gray-800 hover:border-black hover:bg-black hover:text-white transition-all duration-300 cursor-pointer"
-              variants={fadeUp}
-            >
-              <Icon size={14} strokeWidth={2} />
-              <span>{label}</span>
-            </motion.button>
-          ))}
-        </motion.div>
+          {/* Pills */}
+          <motion.div className="flex flex-wrap justify-center gap-3"
+            initial="initial" whileInView="animate" viewport={{ once: true }}
+            variants={{ initial: {}, animate: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } } }}>
+            {[
+              { icon: Bone, label: "Dinosaurs" },
+              { icon: Dna, label: "Ancient Life" },
+              { icon: Gem, label: "Minerals" },
+              { icon: Leaf, label: "Fossils" },
+              { icon: BookOpen, label: "Learn More" },
+            ].map(({ icon: Icon, label }) => (
+              <motion.button key={label}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-medium uppercase tracking-wider cursor-pointer transition-all duration-300"
+                style={{ border: "1px solid #d0d0d0", backgroundColor: "rgba(255,255,255,0.7)", color: "#4a4a4a" }}
+                variants={fadeUp}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "#1a1a1a"; e.currentTarget.style.backgroundColor = "#1a1a1a"; e.currentTarget.style.color = "#fcfcfc"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "#d0d0d0"; e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.7)"; e.currentTarget.style.color = "#4a4a4a"; }}>
+                <Icon size={14} strokeWidth={2} />
+                <span>{label}</span>
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
 
-        {/* ── 2D. SPACER — scales with viewport ── */}
-        <div className="min-h-[120px] sm:min-h-[200px] md:min-h-[350px] lg:min-h-[450px]" />
-
-        {/* ── 2E. BOTTOM TEXT — visible on all sizes ── */}
-        <div className="absolute bottom-0 inset-x-0 px-4 sm:px-6 md:px-16 pb-5 sm:pb-6 md:pb-10 flex justify-between pointer-events-none">
-          <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono tracking-widest uppercase text-gray-500 font-medium">
+        {/* Bottom bar */}
+        <div className="flex justify-between items-center mt-16 py-5" style={{ paddingLeft: "5%", paddingRight: "5%", borderTop: "1px solid #e8e8e8" }}>
+          <span className="text-[10px] font-mono tracking-widest uppercase font-medium" style={{ color: "#8a8a8a" }}>
             WE DON'T JUST TELL STORIES.
           </span>
-          <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono tracking-widest uppercase text-gray-500 font-medium">
+          <span className="text-[10px] font-mono tracking-widest uppercase font-medium" style={{ color: "#8a8a8a" }}>
             PALEONTOLOGY (C) 2026
           </span>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          SECTION 3 — MARQUEE / BRAND BAND
+          SECTION 3 — MARQUEE (subtle)
           ═══════════════════════════════════════════════════════ */}
-      <div className="relative w-full overflow-hidden bg-[#0a0a0a] py-4 sm:py-5 md:py-6 z-30">
+      <div style={{ backgroundColor: "#0a0a0a", paddingTop: 14, paddingBottom: 14, overflow: "hidden" }}>
         <div className="flex whitespace-nowrap animate-marquee">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <span key={i} className="flex items-center gap-4 sm:gap-6 md:gap-8 text-white/80 text-sm sm:text-lg md:text-2xl lg:text-3xl font-mono tracking-widest uppercase mx-4 sm:mx-6 md:mx-8 shrink-0">
-              <span>WE DON'T JUST TELL STORIES.</span>
-              <span className="text-gray-500">•</span>
-              <span>PALEONTOLOGY (C) 2026</span>
-              <span className="text-gray-500">•</span>
-              <span className="text-gray-400">PTERODACTYL</span>
-              <span className="text-gray-500">•</span>
+          {Array.from({ length: 6 }).map((_, i) => (
+            <span key={i} className="flex items-center gap-8 text-xs font-mono tracking-widest uppercase mx-8 shrink-0"
+              style={{ color: "rgba(176,176,168,0.35)" }}>
+              <span>WE DON'T JUST TELL STORIES</span>
+              <span style={{ color: "rgba(42,42,42,0.6)" }}>•</span>
+              <span>PALEONTOLOGY © 2026</span>
+              <span style={{ color: "rgba(42,42,42,0.6)" }}>•</span>
+              <span style={{ color: "rgba(176,176,168,0.5)" }}>PTERODACTYL</span>
+              <span style={{ color: "rgba(42,42,42,0.6)" }}>•</span>
             </span>
           ))}
         </div>
@@ -485,58 +394,54 @@ export default function App() {
 
       {/* ═══════════════════════════════════════════════════════
           SECTION 4 — MISSION BLOCK
+          No negative margins, no overlap
           ═══════════════════════════════════════════════════════ */}
-      <section className="relative w-full bg-[#0a0a0a] text-white overflow-hidden z-30">
-        {/* Pterodactyl overlapping image */}
-        <motion.div
-          className="relative w-full max-w-[100vw] overflow-hidden"
-          initial={{ y: "-40%", opacity: 0 }} whileInView={{ y: "-55%", opacity: 1 }}
-          viewport={{ once: true, margin: "100px" }} transition={{ duration: 1.4, ease: "easeOut" }}
-        >
-          <img
-            src="https://res.cloudinary.com/dsdxaxkiz/image/upload/v1779625001/ChatGPT_Image_May_23_2026_12_24_44_PM_1_lv1dne.png"
-            alt="Pterodactyl" className="w-full h-auto max-w-full mx-auto" crossOrigin="anonymous" referrerPolicy="no-referrer"
-          />
-        </motion.div>
+      <section style={{ backgroundColor: "#0a0a0a", overflow: "hidden" }}>
 
-        {/* Mission content — overlaps the image */}
-        <div className="relative z-10 px-4 sm:px-6 md:px-16 pt-8 sm:pt-12 md:pt-16 pb-8 sm:pb-10 md:pb-12 -mt-[30%] sm:-mt-[35%] md:-mt-[40%]">
-          <div className="flex flex-col xl:flex-row justify-between gap-6 md:gap-10">
+        {/* Pterodactyl image — contained, no overlap */}
+        <div style={{ maxWidth: 1200, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }}>
+          <motion.div initial={{ y: 40, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: "80px" }} transition={{ duration: 1.2, ease: "easeOut" }}>
+            <img src="https://res.cloudinary.com/dsdxaxkiz/image/upload/v1779625001/ChatGPT_Image_May_23_2026_12_24_44_PM_1_lv1dne.png"
+              alt="Pterodactyl" style={{ width: "100%", height: "auto" }} crossOrigin="anonymous" referrerPolicy="no-referrer" />
+          </motion.div>
+        </div>
 
-            {/* Left — Main heading */}
-            <motion.h2
-              className="text-section font-medium tracking-tight text-white max-w-[700px]"
-              initial={{ y: 40, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true }} transition={{ duration: 0.6 }}
-            >
+        {/* Mission text — below image, no overlap */}
+        <div style={{ maxWidth: 1200, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%", paddingTop: 60, paddingBottom: 80 }}>
+          <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between" style={{ gap: 48 }}>
+
+            {/* Left — heading */}
+            <motion.h2 className="font-medium tracking-tight"
+              style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", lineHeight: 1.15, color: "#f5f5f0", maxWidth: 680 }}
+              initial={{ y: 30, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.6 }}>
               Curated from millions of years of wonder{" "}
-              <span className="inline-flex gap-1.5 sm:gap-2 md:gap-3 align-middle mx-1 sm:mx-2 md:mx-3 translate-y-[-2px] sm:translate-y-[-4px]">
+              <span className="inline-flex gap-2 md:gap-3 align-middle mx-1 md:mx-2 translate-y-[-3px]">
                 {[Bone, Dna, Leaf].map((Icon, i) => (
-                  <motion.span
-                    key={i}
-                    className="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full border border-gray-600 bg-black text-gray-400 cursor-pointer hover:bg-white hover:text-black hover:border-white transition-all duration-300"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <Icon size={16} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                  <motion.span key={i}
+                    className="inline-flex items-center justify-center rounded-full cursor-pointer transition-all duration-300"
+                    style={{ width: 40, height: 40, border: "1px solid #3a3a3a", backgroundColor: "#141414", color: "#6a6a62" }}
+                    whileHover={{ scale: 1.1, backgroundColor: "#f5f5f0", color: "#0a0a0a", borderColor: "#f5f5f0" }}>
+                    <Icon size={16} />
                   </motion.span>
                 ))}
               </span>
-              <br className="block sm:hidden" />
               &amp; discovery.
             </motion.h2>
 
-            {/* Right — Tagline + pills */}
-            <div className="flex flex-col shrink-0 xl:max-w-[320px] mt-4 xl:mt-0">
-              <p className="text-[9px] md:text-[10px] font-mono tracking-widest text-gray-400 uppercase mb-4 sm:mb-5 md:mb-6 leading-relaxed">
+            {/* Right — tagline + pills */}
+            <div className="flex flex-col shrink-0 xl:max-w-[300px]" style={{ marginTop: 32 }}>
+              <p className="text-[10px] font-mono tracking-widest uppercase mb-6 leading-relaxed"
+                style={{ color: "#b0b0a8" }}>
                 WE DON'T JUST DISPLAY FOSSILS<br />WE SHARE EARTH'S STORY
               </p>
-              <div className="flex flex-wrap gap-2 sm:gap-3">
+              <div className="flex flex-wrap gap-3">
                 {["Educational", "Authentic", "Inspiring"].map(p => (
-                  <motion.span
-                    key={p}
-                    className="px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2 rounded-full border border-gray-600 text-[8px] sm:text-[9px] font-mono tracking-widest uppercase text-gray-300 cursor-pointer hover:bg-white hover:text-black hover:border-white transition-all duration-300"
-                    whileHover={{ scale: 1.05 }}
-                  >
+                  <motion.span key={p}
+                    className="px-4 py-2 rounded-full text-[10px] font-mono tracking-widest uppercase cursor-pointer transition-all duration-300"
+                    style={{ border: "1px solid #3a3a3a", color: "#b0b0a8" }}
+                    whileHover={{ scale: 1.05, backgroundColor: "#f5f5f0", color: "#0a0a0a", borderColor: "#f5f5f0" }}>
                     {p}
                   </motion.span>
                 ))}
@@ -548,105 +453,97 @@ export default function App() {
 
       {/* ═══════════════════════════════════════════════════════
           SECTION 5 — CHAPTER SLIDER (03)
+          CSS Grid, proper gaps, no overlap
           ═══════════════════════════════════════════════════════ */}
-      <section className="relative w-full bg-[#0a0a0a] text-white flex flex-col z-30 overflow-hidden">
+      <section style={{ backgroundColor: "#0a0a0a", overflow: "hidden" }}>
 
-        {/* ── Section label ── */}
-        <div className="px-4 sm:px-6 md:px-16 pt-8 sm:pt-10 md:pt-12 mb-4 sm:mb-6">
-          <span className="text-[10px] md:text-[11px] font-mono tracking-[0.2em] text-gray-500">
+        {/* Label */}
+        <div style={{ maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%", paddingTop: 60, paddingBottom: 24 }}>
+          <span className="text-xs font-mono tracking-widest" style={{ color: "#6a6a62" }}>
             [ 03 ] ANCIENT COLLECTION
           </span>
         </div>
 
-        {/* ── TWO-COLUMN PANEL ── */}
-        <div className="relative z-10">
-          <div className="h-[1px] bg-gray-800" />
-          <div className="flex flex-col md:flex-row">
+        {/* Divider */}
+        <div style={{ height: 1, backgroundColor: "#2a2a2a" }} />
 
-            {/* Left panel — image (35% desktop, full-width mobile) */}
-            <div className="w-full md:w-[35%] border-b md:border-b-0 md:border-r border-gray-800 min-h-[250px] sm:min-h-[300px] md:min-h-[400px] lg:min-h-[480px] flex flex-col">
-              <div className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 flex items-center justify-between">
-                <span className="text-gray-500 text-sm sm:text-base md:text-xl tracking-[0.3em]">***</span>
-                {/* Mobile nav arrows */}
+        {/* Two-column grid */}
+        <div style={{ maxWidth: 1440, margin: "0 auto" }}>
+          <div className="grid grid-cols-1 md:grid-cols-[40%_60%]">
+
+            {/* Left — image panel */}
+            <div className="flex flex-col" style={{ minHeight: 320, borderBottom: "1px solid #2a2a2a", borderRight: "none" }}>
+              <div className="flex items-center justify-between" style={{ padding: "20px 32px" }}>
+                <span style={{ color: "#6a6a62", fontSize: 18, letterSpacing: "0.3em" }}>***</span>
                 <div className="flex gap-2 md:hidden">
-                  <button onClick={goToPrevChapter} className="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center hover:border-white transition-colors" aria-label="Previous chapter">
+                  <button onClick={() => setActiveChapter(p => (p - 1 + 5) % 5)} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                    style={{ border: "1px solid #3a3a3a", color: "#6a6a62" }} aria-label="Previous">
                     <ChevronLeft size={16} />
                   </button>
-                  <button onClick={goToNextChapter} className="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center hover:border-white transition-colors" aria-label="Next chapter">
+                  <button onClick={() => setActiveChapter(p => (p + 1) % 5)} className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                    style={{ border: "1px solid #3a3a3a", color: "#6a6a62" }} aria-label="Next">
                     <ChevronRight size={16} />
                   </button>
                 </div>
               </div>
-              <div className="flex-1 relative min-h-[180px] sm:min-h-[220px]">
+              <div className="flex-1 relative" style={{ minHeight: 200 }}>
                 <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeChapter}
-                    className="absolute inset-0"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <SandTransitionImage
-                      src={chaptersData[activeChapter].image}
-                      alt={chaptersData[activeChapter].name}
-                      className="w-full h-full"
-                    />
+                  <motion.div key={activeChapter} className="absolute inset-0"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.5 }}>
+                    <SandTransitionImage src={chaptersData[activeChapter].image} alt={chaptersData[activeChapter].name} className="w-full h-full" />
                   </motion.div>
                 </AnimatePresence>
               </div>
-              <div className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5">
-                <div className="text-[10px] font-mono tracking-widest text-[#888] uppercase flex items-center gap-2">
-                  <span className="inline-block overflow-hidden h-4">
+              <div style={{ padding: "16px 32px" }}>
+                <div className="text-xs font-mono tracking-widest uppercase flex items-center gap-2" style={{ color: "#6a6a62" }}>
+                  <span className="inline-block overflow-hidden" style={{ height: 16 }}>
                     <AnimatePresence mode="wait">
-                      <motion.span
-                        key={activeChapter}
-                        className="inline-block"
-                        initial={{ y: 14 }} animate={{ y: 0 }} exit={{ y: -14 }}
-                        transition={{ duration: 0.3 }}
-                      >
+                      <motion.span key={activeChapter} className="inline-block"
+                        initial={{ y: 14 }} animate={{ y: 0 }} exit={{ y: -14 }} transition={{ duration: 0.3 }}>
                         {String(activeChapter + 1).padStart(2, "0")}
                       </motion.span>
                     </AnimatePresence>
                   </span>
-                  <span className="text-[#333]">/</span>
+                  <span style={{ color: "#333" }}>/</span>
                   <span>05</span>
                 </div>
               </div>
             </div>
 
-            {/* Right panel — chapter list (65% desktop, full-width mobile) */}
-            <div className="w-full md:w-[65%] flex flex-col">
+            {/* Right — chapter list */}
+            <div className="flex flex-col">
               {/* Top bar */}
-              <div className="border-b border-gray-800 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 flex items-center justify-between gap-4">
-                <span className="text-[9px] sm:text-[10px] font-mono text-gray-400 tracking-widest leading-snug">
+              <div className="flex items-center justify-between gap-4" style={{ padding: "20px 32px", borderBottom: "1px solid #2a2a2a" }}>
+                <span className="text-[10px] font-mono tracking-widest" style={{ color: "#6a6a62" }}>
                   Explore the past. Understand the present.
                 </span>
-                <span className="text-[9px] sm:text-[10px] font-mono text-gray-400 tracking-widest shrink-0">
+                <span className="text-[10px] font-mono tracking-widest shrink-0" style={{ color: "#6a6a62" }}>
                   {chaptersData[activeChapter].name} {String(activeChapter + 1).padStart(2, "0")}/05
                 </span>
               </div>
 
-              {/* Chapter list */}
+              {/* Chapter items */}
               {chaptersData.map((chapter, index) => (
-                <motion.div
-                  key={index}
-                  className={`border-b border-gray-800/80 px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 lg:py-7 cursor-pointer flex items-center justify-between transition-colors duration-300 ${
-                    activeChapter === index ? "text-white" : "text-[#444] hover:text-[#999]"
-                  }`}
+                <motion.div key={index}
+                  className="cursor-pointer flex items-center justify-between gap-4 transition-all duration-300"
+                  style={{
+                    padding: "24px 32px",
+                    borderBottom: "1px solid rgba(42,42,42,0.6)",
+                    backgroundColor: activeChapter === index ? "#141414" : "transparent",
+                    color: activeChapter === index ? "#f5f5f0" : "#6a6a62",
+                  }}
                   onClick={() => setActiveChapter(index)}
-                >
-                  <span className="text-lg sm:text-xl md:text-2xl lg:text-[2rem] font-medium tracking-tight leading-snug pr-4">
+                  onMouseEnter={e => { if (activeChapter !== index) { e.currentTarget.style.backgroundColor = "rgba(20,20,20,0.5)"; e.currentTarget.style.color = "#b0b0a8"; } }}
+                  onMouseLeave={e => { if (activeChapter !== index) { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#6a6a62"; } }}>
+                  <span className="font-medium tracking-tight"
+                    style={{ fontSize: "clamp(1rem, 1.5vw, 1.25rem)", lineHeight: 1.3 }}>
                     {chapter.name}
                   </span>
                   <AnimatePresence>
                     {activeChapter === index && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.7 }}
-                        transition={{ duration: 0.2 }}
-                        className="shrink-0"
-                      >
-                        <ArrowUpRight size={18} className="sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-400" strokeWidth={1} />
+                      <motion.div initial={{ opacity: 0, scale: 0.7, x: -8 }} animate={{ opacity: 1, scale: 1, x: 0 }}
+                        exit={{ opacity: 0, scale: 0.7, x: -8 }} transition={{ duration: 0.2 }} className="shrink-0">
+                        <ArrowUpRight size={20} strokeWidth={1} style={{ color: "#b0b0a8" }} />
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -658,25 +555,22 @@ export default function App() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          SECTION 6 — CLOSING FOOTER
+          SECTION 6 — FOOTER
           ═══════════════════════════════════════════════════════ */}
-      <section className="relative w-full bg-[#0a0a0a] overflow-hidden z-30">
-        <div className="h-[1px] bg-gray-800" />
-        <div className="px-4 sm:px-6 md:px-16 py-6 sm:py-8 md:py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-[9px] sm:text-[10px] font-mono tracking-widest text-gray-500 uppercase text-center sm:text-left">
+      <footer style={{ backgroundColor: "#0a0a0a", overflow: "hidden" }}>
+        <div style={{ height: 1, backgroundColor: "#2a2a2a" }} />
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4"
+          style={{ maxWidth: 1440, margin: "0 auto", padding: "32px 5%" }}>
+          <span className="text-[10px] font-mono tracking-widest uppercase text-center sm:text-left" style={{ color: "#6a6a62" }}>
             DIGGING INTO OUR PLANET'S PAST
           </span>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-gray-600 uppercase">
-              Natural History Museum
-            </span>
-            <span className="text-gray-700">•</span>
-            <span className="text-[8px] sm:text-[9px] font-mono tracking-widest text-gray-600 uppercase">
-              Est. 2026
-            </span>
+          <div className="flex items-center gap-3">
+            <span className="text-[9px] font-mono tracking-widest uppercase" style={{ color: "#4a4a4a" }}>Natural History Museum</span>
+            <span style={{ color: "#3a3a3a" }}>•</span>
+            <span className="text-[9px] font-mono tracking-widest uppercase" style={{ color: "#4a4a4a" }}>Est. 2026</span>
           </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 }
