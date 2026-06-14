@@ -124,7 +124,7 @@ export default function App() {
       {/* ═══════════════════════════════════════════════════════
           NAVIGATION — Sticky, fixed height, no overlap
           ═══════════════════════════════════════════════════════ */}
-      <nav className="nav-backdrop" style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 64 }}>
+      <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 64, backgroundColor: "rgba(252,252,252,0.92)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
         <div style={{ maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%", height: "100%" }} className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-3">
@@ -211,6 +211,15 @@ export default function App() {
           </div>
         )}
 
+        {/* Gradient scrim for text contrast — responsive opacity */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 5,
+          pointerEvents: "none",
+          background: "linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.25) 40%, rgba(10,10,10,0.35) 70%, rgba(10,10,10,0.55) 100%)",
+        }} />
+
         {/* Hero content — starts well below the 64px fixed nav */}
         <div style={{ position: "relative", zIndex: 10, paddingTop: "clamp(120px, 15vh, 180px)", paddingBottom: 80, maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }}>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between" style={{ gap: 48 }}>
@@ -219,19 +228,19 @@ export default function App() {
             <motion.div className="w-full lg:w-auto" style={{ maxWidth: "100%", flex: "1 1 auto" }} initial="initial" animate="animate" variants={fadeUpStagger}>
               {/* Section label */}
               <motion.div className="flex items-center gap-3 mb-6" variants={fadeUp}>
-                <span className="text-xs font-mono tracking-widest" style={{ color: "#8a8a8a" }}>01</span>
-                <div style={{ width: 48, height: 1, backgroundColor: "#d0d0d0" }} />
+                <span className="text-xs font-mono tracking-widest" style={{ color: "#d0d0d0" }}>01</span>
+                <div style={{ width: 48, height: 1, backgroundColor: "rgba(255,255,255,0.25)" }} />
               </motion.div>
 
-              {/* H1 — clamped 48-64px */}
+              {/* H1 — white with subtle text-shadow for extra punch */}
               <motion.h1 className="font-normal tracking-tight mb-6 w-full"
-                style={{ fontSize: "clamp(2.25rem, 6vw, 4rem)", lineHeight: 1.05, color: "#1a1a1a", maxWidth: "100%" }}
+                style={{ fontSize: "clamp(2.25rem, 6vw, 4rem)", lineHeight: 1.05, color: "#f5f5f0", maxWidth: "100%", textShadow: "0 2px 12px rgba(0,0,0,0.3)" }}
                 variants={fadeUp}>
                 TIMELESS<br />WONDERS
               </motion.h1>
 
-              {/* Body — 16-20px, responsive width */}
-              <motion.p className="mb-10 w-full" style={{ fontSize: "clamp(0.9375rem, 1.4vw, 1.25rem)", lineHeight: 1.6, color: "#4a4a4a", maxWidth: "100%" }}
+              {/* Body — light gray for readability on dark scrim */}
+              <motion.p className="mb-10 w-full" style={{ fontSize: "clamp(0.9375rem, 1.4vw, 1.25rem)", lineHeight: 1.6, color: "#d0d0d0", maxWidth: "100%", textShadow: "0 1px 6px rgba(0,0,0,0.25)" }}
                 variants={fadeUp}>
                 Step into the natural world and<br className="hidden sm:block" />discover the stories written<br className="hidden sm:block" />millions of years ago.
               </motion.p>
@@ -239,18 +248,18 @@ export default function App() {
               {/* CTA */}
               <motion.div variants={fadeUp} className="w-full sm:w-auto">
                 <motion.button className="relative px-6 sm:px-8 py-3.5 rounded-md overflow-hidden group flex items-center gap-3 cursor-pointer w-full sm:w-auto justify-center"
-                  style={{ backgroundColor: "#1a1a1a", border: "1px solid #1a1a1a" }}
+                  style={{ backgroundColor: "#f5f5f0", border: "1px solid #f5f5f0" }}
                   whileHover={{ y: -1 }} whileTap={{ y: 0 }}>
-                  <motion.span className="absolute inset-0" style={{ backgroundColor: "#fcfcfc" }}
+                  <motion.span className="absolute inset-0" style={{ backgroundColor: "#1a1a1a" }}
                     initial={{ x: "-101%" }} whileHover={{ x: 0 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} />
-                  <motion.span className="relative z-10 group-hover:[color:#1a1a1a] transition-colors duration-300"
+                  <motion.span className="relative z-10 group-hover:[color:#f5f5f0] transition-colors duration-300"
                     whileHover={{ scale: 1.1, rotate: -12, y: -4 }}
-                    style={{ color: "#fcfcfc" }}>
+                    style={{ color: "#1a1a1a" }}>
                     <LeafIcon className="w-[18px] h-[18px]" />
                   </motion.span>
-                  <span className="relative z-10 text-sm font-medium group-hover:[color:#1a1a1a] transition-colors duration-300"
-                    style={{ color: "#fcfcfc" }}>
+                  <span className="relative z-10 text-sm font-medium group-hover:[color:#f5f5f0] transition-colors duration-300"
+                    style={{ color: "#1a1a1a" }}>
                     Explore Now
                   </span>
                 </motion.button>
@@ -260,12 +269,12 @@ export default function App() {
             {/* Right zone — T-Rex card, only on lg+ */}
             <motion.div className="hidden lg:block shrink-0 w-full lg:w-auto" style={{ maxWidth: 320, minWidth: 0 }}
               initial="initial" animate="animate" variants={fadeUpStagger}>
-              <div className="rounded-xl p-6" style={{ backgroundColor: "rgba(252,252,252,0.85)", backdropFilter: "blur(8px)", border: "1px solid #e8e8e8" }}>
+              <div className="rounded-xl p-6" style={{ backgroundColor: "rgba(20,20,20,0.75)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.1)" }}>
                 <motion.div className="mb-5" variants={fadeUp}>
-                  <h3 className="text-xs font-bold font-mono uppercase tracking-widest mb-2" style={{ color: "#8a8a8a" }}>
+                  <h3 className="text-xs font-bold font-mono uppercase tracking-widest mb-2" style={{ color: "#b0b0a8" }}>
                     Tyrannosaurus Rex
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#4a4a4a" }}>
+                  <p className="text-sm leading-relaxed" style={{ color: "#d0d0d0" }}>
                     Late Cretaceous period<br />68–66 million years ago
                   </p>
                 </motion.div>
@@ -278,20 +287,20 @@ export default function App() {
                     { label: "Weight", value: "8,000 kg" },
                   ].map((stat, i) => (
                     <div key={stat.label} className="flex items-baseline justify-between"
-                      style={{ paddingTop: 8, paddingBottom: 8, borderBottom: i < 2 ? "1px solid #e8e8e8" : "none" }}>
-                      <span className="text-xs font-mono uppercase tracking-widest shrink-0" style={{ color: "#8a8a8a" }}>{stat.label}</span>
-                      <span className="text-sm font-medium tabular-nums" style={{ color: "#4a4a4a" }}>{stat.value}</span>
+                      style={{ paddingTop: 8, paddingBottom: 8, borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.1)" : "none" }}>
+                      <span className="text-xs font-mono uppercase tracking-widest shrink-0" style={{ color: "#b0b0a8" }}>{stat.label}</span>
+                      <span className="text-sm font-medium tabular-nums" style={{ color: "#f5f5f0" }}>{stat.value}</span>
                     </div>
                   ))}
                 </motion.div>
 
                 <motion.div className="flex items-center gap-3 cursor-pointer group" variants={fadeUp}>
-                  <motion.div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer group-hover:bg-[#1a1a1a] transition-all duration-300"
-                    style={{ border: "1px solid #c0c0c0" }} whileHover={{ scale: 1.05 }}>
-                    <Plus size={16} strokeWidth={1.5} className="group-hover:text-[#fcfcfc] transition-colors duration-300" style={{ color: "#8a8a8a" }} />
+                  <motion.div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer group-hover:bg-[#f5f5f0] transition-all duration-300"
+                    style={{ border: "1px solid rgba(255,255,255,0.2)" }} whileHover={{ scale: 1.05 }}>
+                    <Plus size={16} strokeWidth={1.5} className="group-hover:text-[#1a1a1a] transition-colors duration-300" style={{ color: "#d0d0d0" }} />
                   </motion.div>
-                  <span className="text-xs font-mono uppercase tracking-widest font-bold group-hover:[color:#1a1a1a] transition-colors duration-300"
-                    style={{ color: "#8a8a8a" }}>
+                  <span className="text-xs font-mono uppercase tracking-widest font-bold group-hover:[color:#f5f5f0] transition-colors duration-300"
+                    style={{ color: "#d0d0d0" }}>
                     View Details
                   </span>
                 </motion.div>
@@ -304,13 +313,13 @@ export default function App() {
         <motion.div className="absolute bottom-8 flex items-center gap-3" style={{ left: "5%", zIndex: 10 }}
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2, duration: 0.8, ease: "easeOut" }}>
-          <div className="w-10 h-10 rounded-full flex items-center justify-center gap-[4px]" style={{ border: "1px solid #d0d0d0" }}>
-            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#8a8a8a" }}
+          <div className="w-10 h-10 rounded-full flex items-center justify-center gap-[4px]" style={{ border: "1px solid rgba(255,255,255,0.3)" }}>
+            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#d0d0d0" }}
               animate={{ y: [0, 2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} />
-            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#8a8a8a" }}
+            <motion.div className="w-px h-2.5" style={{ backgroundColor: "#d0d0d0" }}
               animate={{ y: [0, -2, 0] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} />
           </div>
-          <span className="text-[10px] font-mono tracking-widest uppercase font-medium" style={{ color: "#8a8a8a" }}>
+          <span className="text-[10px] font-mono tracking-widest uppercase font-medium" style={{ color: "#d0d0d0" }}>
             Scroll to explore
           </span>
         </motion.div>
