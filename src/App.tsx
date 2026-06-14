@@ -82,7 +82,7 @@ function SandTransitionImage({ src, alt, className = "" }: { src: string; alt: s
         </defs>
       </svg>
       <img src={displaySrc} alt={alt} crossOrigin="anonymous" referrerPolicy="no-referrer"
-        className="absolute inset-0 w-[80%] h-[80%] m-auto object-contain mix-blend-lighten"
+        className="absolute inset-0 w-full h-full object-cover mix-blend-lighten"
         style={{ filter: `url(#${fid})` }} />
     </div>
   );
@@ -168,7 +168,7 @@ export default function App() {
       {/* Mobile menu */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div className="md:hidden fixed inset-0 z-[90]" style={{ backgroundColor: "#fcfcfc" }}
+          <motion.div className="md:hidden fixed inset-0 z-[110]" style={{ backgroundColor: "#fcfcfc" }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <div className="flex items-center justify-between px-6" style={{ height: 64 }}>
               <span className="text-sm font-mono uppercase tracking-widest" style={{ color: "#8a8a8a" }}>Menu</span>
@@ -211,27 +211,27 @@ export default function App() {
           </div>
         )}
 
-        {/* Hero content — starts below the 64px fixed nav */}
-        <div style={{ position: "relative", zIndex: 10, paddingTop: 100, paddingBottom: 80, maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }}>
+        {/* Hero content — starts well below the 64px fixed nav */}
+        <div style={{ position: "relative", zIndex: 10, paddingTop: "clamp(120px, 15vh, 180px)", paddingBottom: 80, maxWidth: 1440, margin: "0 auto", paddingLeft: "5%", paddingRight: "5%" }}>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between" style={{ gap: 48 }}>
 
             {/* Left zone — headline */}
             <motion.div className="w-full lg:w-auto" style={{ maxWidth: "100%", flex: "1 1 auto" }} initial="initial" animate="animate" variants={fadeUpStagger}>
               {/* Section label */}
-              <motion.div className="flex items-center gap-3 mb-5" variants={fadeUp}>
+              <motion.div className="flex items-center gap-3 mb-6" variants={fadeUp}>
                 <span className="text-xs font-mono tracking-widest" style={{ color: "#8a8a8a" }}>01</span>
                 <div style={{ width: 48, height: 1, backgroundColor: "#d0d0d0" }} />
               </motion.div>
 
               {/* H1 — clamped 48-64px */}
-              <motion.h1 className="font-normal tracking-tight mb-5 w-full"
+              <motion.h1 className="font-normal tracking-tight mb-6 w-full"
                 style={{ fontSize: "clamp(2.25rem, 6vw, 4rem)", lineHeight: 1.05, color: "#1a1a1a", maxWidth: "100%" }}
                 variants={fadeUp}>
                 TIMELESS<br />WONDERS
               </motion.h1>
 
               {/* Body — 16-20px, responsive width */}
-              <motion.p className="mb-8 w-full" style={{ fontSize: "clamp(0.9375rem, 1.4vw, 1.25rem)", lineHeight: 1.6, color: "#4a4a4a", maxWidth: "100%" }}
+              <motion.p className="mb-10 w-full" style={{ fontSize: "clamp(0.9375rem, 1.4vw, 1.25rem)", lineHeight: 1.6, color: "#4a4a4a", maxWidth: "100%" }}
                 variants={fadeUp}>
                 Step into the natural world and<br className="hidden sm:block" />discover the stories written<br className="hidden sm:block" />millions of years ago.
               </motion.p>
@@ -286,7 +286,7 @@ export default function App() {
                 </motion.div>
 
                 <motion.div className="flex items-center gap-3 cursor-pointer group" variants={fadeUp}>
-                  <motion.div className="w-10 h-10 rounded-full flex items-center justify-center group-hover:bg-[#1a1a1a] transition-all duration-300"
+                  <motion.div className="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer group-hover:bg-[#1a1a1a] transition-all duration-300"
                     style={{ border: "1px solid #c0c0c0" }} whileHover={{ scale: 1.05 }}>
                     <Plus size={16} strokeWidth={1.5} className="group-hover:text-[#fcfcfc] transition-colors duration-300" style={{ color: "#8a8a8a" }} />
                   </motion.div>
@@ -378,7 +378,7 @@ export default function App() {
           ═══════════════════════════════════════════════════════ */}
       <div style={{ backgroundColor: "#0a0a0a", paddingTop: 14, paddingBottom: 14, overflow: "hidden" }}>
         <div className="flex whitespace-nowrap animate-marquee">
-          {Array.from({ length: 6 }).map((_, i) => (
+          {Array.from({ length: 2 }).map((_, i) => (
             <span key={i} className="flex items-center gap-8 text-xs font-mono tracking-widest uppercase mx-8 shrink-0"
               style={{ color: "rgba(176,176,168,0.35)" }}>
               <span>WE DON'T JUST TELL STORIES</span>
