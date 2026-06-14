@@ -67,6 +67,11 @@ async function start() {
       server: { middlewareMode: true },
     });
     app.use(vite.middlewares);
+    // SPA fallback for dev — serve index.html for all non-API routes
+    app.get("*", (req, res, next) => {
+      if (req.path.startsWith("/api")) return next();
+      res.sendFile(path.join(__dirname, "..", "index.html"));
+    });
     console.log(`\n  NHM Dev Server → http://localhost:${PORT}`);
     console.log(`  Vite HMR enabled\n`);
   } else {
